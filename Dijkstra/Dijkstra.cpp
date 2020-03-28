@@ -16,6 +16,7 @@ void Relax(vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, gr
     if(vdvalue > u.second + v.second) {
         dvalues[v.first] = u.second + v.second;
         pivalues[v.first] = u.first;
+        /*We cant do decrease key operation on std::priority queue so we insert a new element in the heap with key decreased. Complexity is the same O(logV)*/
         Q.push(make_pair(v.first, dvalues[v.first]));
     }
 }
@@ -28,6 +29,7 @@ void algorithmDijkstra(const Graph &g, int indexVertex) {
     InitializeSingleSource(dvalues, pivalues, indexVertex);
     priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> Q;
     initPriorityQueue(dvalues, Q, numVertex);
+    /*To ensure that we visit the V entries of queue with the lowest key so that complexity of Dijkstra stays O(ElogV)*/
     while(!Q.empty() && i < numVertex) {
         pair<int,int> u = Q.top();
         Q.pop();
