@@ -14,6 +14,7 @@ public:
     Graph(int V);
     void addEdge(int v1, int v2);
     void printGraph();
+    int getNumVertex() const;
     ~Graph();
 };
 
