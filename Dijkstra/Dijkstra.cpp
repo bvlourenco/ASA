@@ -30,7 +30,7 @@ void algorithmDijkstra(const Graph &g, int indexVertex) {
     priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> Q;
     initPriorityQueue(dvalues, Q, numVertex);
     /*To ensure that we visit the V entries of queue with the lowest key so that complexity of Dijkstra stays O(ElogV)*/
-    while(!Q.empty() && i < numVertex) {
+    while(i < numVertex) {
         pair<int,int> u = Q.top();
         Q.pop();
         for(auto iterator = adjLst[u.first].begin(); iterator != adjLst[u.first].end(); iterator++) {
@@ -38,11 +38,11 @@ void algorithmDijkstra(const Graph &g, int indexVertex) {
         }
         i++;
     }
-    cout << "After Dijkstra algorithm: ";
+    cout << "\nAfter Dijkstra algorithm: \n\nD values: \n";
     for(int i = 0; i < numVertex; i++) {
         cout << dvalues[i] << " | ";
     }
-    cout << "\n";
+    cout << "\n\nPi values: \n";
     for(int i = 0; i < numVertex; i++) {
         cout << pivalues[i] << " | ";
     }

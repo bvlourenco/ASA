@@ -30,15 +30,16 @@ bool algorithmBellmanFord(const Graph &g, int indexVertex) {
         pair<int, int> u = make_pair(i, dvalues[i]);
         for(auto iterator = adjLst[i].begin(); iterator != adjLst[i].end(); iterator++) {
             if(dvalues[iterator->first] > u.second + iterator->second) {
+                cout << "\nGraph with negative cycle" << endl;
                 return false;
             }
         }
     }
-    cout << "After Bellman-Ford algorithm: ";
+    cout << "\nAfter Bellman-Ford algorithm: \n\nD values: \n";
     for(int i = 0; i < numVertex; i++) {
         cout << dvalues[i] << " | ";
     }
-    cout << "\n";
+    cout << "\n\nPi values: \n";
     for(int i = 0; i < numVertex; i++) {
         cout << pivalues[i] << " | ";
     }

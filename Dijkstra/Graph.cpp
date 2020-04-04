@@ -9,7 +9,7 @@ void Graph::addEdge(int v1, int v2, int w) {
 void Graph::printGraph() {
     for(int i = 0; i < this->V; i++) {
         for(auto iterator = adjLst[i].begin(); iterator != adjLst[i].end(); iterator++) {
-            cout << i << "-->" << iterator->first << " " << iterator->second << " | ";
+            cout << i << "-->" << iterator->first << " w:" << iterator->second << " | ";
         }
         cout << "\n";
     }
