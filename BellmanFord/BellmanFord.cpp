@@ -13,6 +13,18 @@ void Relax(vector<int> &dvalues, vector<int> &pivalues, pair<int,int> u, pair<in
     }
 }
 
+void printValues(const vector<int> &dvalues, const vector<int> &pivalues, int numVertex) {
+    cout << "\nAfter Bellman-Ford algorithm: \n\nD values: \n";
+    for(int i = 0; i < numVertex; i++) {
+        cout << dvalues[i] << " | ";
+    }
+    cout << "\n\nPi values: \n";
+    for(int i = 0; i < numVertex; i++) {
+        cout << pivalues[i] << " | ";
+    }
+    cout << endl;
+}
+
 bool algorithmBellmanFord(const Graph &g, int indexVertex) {
     int numVertex = g.getNumVertex();
     vector<list<pair<int, int>>> adjLst = g.getadjLst();
@@ -35,14 +47,6 @@ bool algorithmBellmanFord(const Graph &g, int indexVertex) {
             }
         }
     }
-    cout << "\nAfter Bellman-Ford algorithm: \n\nD values: \n";
-    for(int i = 0; i < numVertex; i++) {
-        cout << dvalues[i] << " | ";
-    }
-    cout << "\n\nPi values: \n";
-    for(int i = 0; i < numVertex; i++) {
-        cout << pivalues[i] << " | ";
-    }
-    cout << endl;
+    printValues(dvalues, pivalues, numVertex);
     return true;
 }
