@@ -1,8 +1,8 @@
 #include "Johnson.hpp"
 
 void InitializeSingleSource(vector<int> &dvalues, vector<int> &pivalues, int indexVertex) {
-    fill(dvalues.begin(), dvalues.end(), 0x3f3f3f3f);
-    fill(pivalues.begin(), pivalues.end(), -1);
+    fill(dvalues.begin(), dvalues.end(), INFINIT);
+    fill(pivalues.begin(), pivalues.end(), NIL);
     dvalues[indexVertex] = 0;
 }
 
@@ -58,33 +58,33 @@ void initPriorityQueue(const vector<int> &dvalues, priority_queue <int, vector<p
     }
 }
 
-void RelaxDijkstra(vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> &Q, vector<int> &pivalues, pair<int,int> u, pair<int,int> v, int vdvalue) {
+void RelaxDijkstra(vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> &Q, vector<int> &pivalues, pair<int,int> u, pair<int,int> v, int vdvalue, int *i) {
     if(vdvalue > u.first + v.second) {
         dvalues[v.first] = u.first + v.second;
         pivalues[v.first] = u.second;
         Q.push(make_pair(dvalues[v.first], v.first));
+        (*i)++;
     }
 }
 
 vector<int> algorithmDijkstra(const Graph &g, int indexVertex) {
-    int i = 0;
     int numVertex = g.getNumVertex();
+    int i = numVertex - 1;
     vector<list<pair<int, int>>> adjLst = g.getadjLst();
     vector<int> dvalues(numVertex), pivalues(numVertex);
     InitializeSingleSource(dvalues, pivalues, indexVertex);
     priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> Q;
     initPriorityQueue(dvalues, Q, numVertex);
-    while(i < numVertex) {
+    while(i > 0) {
         pair<int,int> u = Q.top();
         Q.pop();
-        /*If discovery time for a given vertex is infinity, we don't need to relax it*/
-        if(u.first == 0x3f3f3f3f) {
+        i--;
+        if(u.first == INFINIT) {
             break;
         }
         for(auto iterator = adjLst[u.second].begin(); iterator != adjLst[u.second].end(); iterator++) {
-            RelaxDijkstra(dvalues, Q, pivalues, u, *iterator, dvalues[iterator->first]);
+            RelaxDijkstra(dvalues, Q, pivalues, u, *iterator, dvalues[iterator->first], &i);
         }
-        i++;
     }
     printValues(dvalues, pivalues, numVertex);
     return dvalues;
@@ -100,7 +100,7 @@ void printJohnson(const vector<vector<int>> &allDvalues, int numVertex) {
     cout << "\nAfter Johnson algorithm: \n\nD values: \n";
     for(int i = 0; i < numVertex; i++) {
         for(int j = 0; j < numVertex; j++) {
-            if (allDvalues[i][j] == 0x3f3f3f3f) {
+            if (allDvalues[i][j] == INFINIT) {
                 cout << "∞" << "|";
             } else {
                 cout << allDvalues[i][j] << "|";
