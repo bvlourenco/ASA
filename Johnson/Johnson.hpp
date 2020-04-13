@@ -5,6 +5,9 @@
 #include <queue>
 #define INFINIT 0x3f3f3f3f
 #define NIL -1
+#define YES 1
+#define NO 0
+#define GREATER greater<pair<int, int>>
 
 /*Prototipes for Bellman-Ford functions*/
 void InitializeSingleSource(vector<int> &dvalues, vector<int> &pivalues, int indexVertex);
@@ -16,7 +19,7 @@ void RelaxDijkstra(vector<int> &dvalues, priority_queue <int, vector<pair<int, i
 vector<int> algorithmDijkstra(const Graph &g, int indexVertex);
 
 void printValues(const vector<int> &dvalues, const vector<int> &pivalues, int numVertex);
-void setValue(int value, int srcHeight, int destHeight);
+int setValue(int value, int srcHeight, int destHeight);
 void printJohnson(const vector<vector<int>> &allDvalues, int numVertex);
 void algorithmJohnson(const Graph &g);
 

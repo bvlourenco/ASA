@@ -1,8 +1,8 @@
 #include "BellmanFord.hpp"
 
 void InitializeSingleSource(vector<int> &dvalues, vector<int> &pivalues, int indexVertex) {
-    fill(dvalues.begin(), dvalues.end(), 0x3f3f3f3f);
-    fill(pivalues.begin(), pivalues.end(), -1);
+    fill(dvalues.begin(), dvalues.end(), INFINIT);
+    fill(pivalues.begin(), pivalues.end(), NIL);
     dvalues[indexVertex] = 0;
 }
 
@@ -27,7 +27,7 @@ void printValues(const vector<int> &dvalues, const vector<int> &pivalues, int nu
 
 bool algorithmBellmanFord(const Graph &g, int indexVertex) {
     int numVertex = g.getNumVertex();
-    vector<list<pair<int, int>>> adjLst = g.getadjLst();
+    AdjLst adjLst = g.getadjLst();
     vector<int> dvalues(numVertex), pivalues(numVertex);
     InitializeSingleSource(dvalues, pivalues, indexVertex);
     for(int i = 0; i < numVertex - 1; i++) {

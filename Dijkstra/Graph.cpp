@@ -20,7 +20,7 @@ int Graph::getNumVertex() const {
     return this->V;
 }
 
-vector<list<pair<int, int>>> Graph::getadjLst() const {
+AdjLst Graph::getadjLst() const {
     return this->adjLst;
 }
 

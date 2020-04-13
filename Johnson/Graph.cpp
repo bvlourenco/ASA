@@ -38,11 +38,11 @@ int Graph::getNumVertex() const {
     return this->V;
 }
 
-vector<list<pair<int, int>>> Graph::getadjLst() const {
+AdjLst Graph::getadjLst() const {
     return this->adjLst;
 }
 
-vector<list<pair<int, int>>>& Graph::getModifiableAdjLst() {
+AdjLst& Graph::getModifiableAdjLst() {
     return this->adjLst;
 }
 

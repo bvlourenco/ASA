@@ -27,7 +27,7 @@ void printValues(const vector<int> &dvalues, const vector<int> &pivalues, int nu
 
 vector<int> algorithmBellmanFord(const Graph &g, int indexVertex) {
     int numVertex = g.getNumVertex();
-    vector<list<pair<int, int>>> adjLst = g.getadjLst();
+    AdjLst adjLst = g.getadjLst();
     vector<int> dvalues(numVertex), pivalues(numVertex);
     InitializeSingleSource(dvalues, pivalues, indexVertex);
     for(int i = 0; i < numVertex - 1; i++) {
@@ -52,13 +52,13 @@ vector<int> algorithmBellmanFord(const Graph &g, int indexVertex) {
     return dvalues;
 }
 
-void initPriorityQueue(const vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> &Q, int numVertex) {
+void initPriorityQueue(const vector<int> &dvalues, priority_queue <pair<int, int>, vector<pair<int, int>>, GREATER> &Q, int numVertex) {
     for(int i = 0; i < numVertex; i++) {
         Q.push(make_pair(dvalues[i], i));
     }
 }
 
-void RelaxDijkstra(vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> &Q, vector<int> &pivalues, pair<int,int> u, pair<int,int> v, int vdvalue, int *i) {
+void RelaxDijkstra(vector<int> &dvalues, priority_queue <pair<int, int>, vector<pair<int, int>>, GREATER> &Q, vector<int> &pivalues, pair<int,int> u, pair<int,int> v, int vdvalue, int *i) {
     if(vdvalue > u.first + v.second) {
         dvalues[v.first] = u.first + v.second;
         pivalues[v.first] = u.second;
@@ -70,18 +70,22 @@ void RelaxDijkstra(vector<int> &dvalues, priority_queue <int, vector<pair<int, i
 vector<int> algorithmDijkstra(const Graph &g, int indexVertex) {
     int numVertex = g.getNumVertex();
     int i = numVertex - 1;
-    vector<list<pair<int, int>>> adjLst = g.getadjLst();
-    vector<int> dvalues(numVertex), pivalues(numVertex);
+    AdjLst adjLst = g.getadjLst();
+    vector<int> dvalues(numVertex), pivalues(numVertex), isVisited(numVertex, NO);
     InitializeSingleSource(dvalues, pivalues, indexVertex);
-    priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+    priority_queue <pair<int, int>, vector<pair<int, int>>, GREATER> Q;
     initPriorityQueue(dvalues, Q, numVertex);
     while(i > 0) {
         pair<int,int> u = Q.top();
         Q.pop();
-        i--;
         if(u.first == INFINIT) {
             break;
         }
+        if(isVisited[u.second]) {
+            continue;
+        }
+        isVisited[u.second] = YES;
+        i--;
         for(auto iterator = adjLst[u.second].begin(); iterator != adjLst[u.second].end(); iterator++) {
             RelaxDijkstra(dvalues, Q, pivalues, u, *iterator, dvalues[iterator->first], &i);
         }
@@ -92,8 +96,8 @@ vector<int> algorithmDijkstra(const Graph &g, int indexVertex) {
 
 /*Check comments for Dijkstra and Bellman Ford in their respective folders*/
 
-void setValue(int value, int srcHeight, int destHeight) {
-    value = value + srcHeight - destHeight;
+int setValue(int value, int srcHeight, int destHeight) {
+    return value + srcHeight - destHeight;
 }
 
 void printJohnson(const vector<vector<int>> &allDvalues, int numVertex) {
@@ -124,23 +128,25 @@ void algorithmJohnson(const Graph &g) {
         newGraph.addEdge(gVertex, i, 0);
     }
     /*We need a reference to adjacency list of new graph (that can be modifiable) to be able to change weight of edges*/
-    vector<list<pair<int, int>>>& adjLst = newGraph.getModifiableAdjLst();
+    AdjLst& adjLst = newGraph.getModifiableAdjLst();
     dvalues = algorithmBellmanFord(newGraph, gVertex);
     if (dvalues[0] != -1) {
         /*For every edge, we change weight of edge if appliable*/
         for(int j = 0; j <= gVertex; j++) {
             for(auto iterator = adjLst[j].begin(); iterator != adjLst[j].end(); iterator++) {
-                setValue(iterator->second, dvalues[j], dvalues[iterator->first]);
+                iterator->second = setValue(iterator->second, dvalues[j], dvalues[iterator->first]);
             }
         }
         /*Now, we need original graph, so we remove extra vertex we added (and the edges coming from it)*/
         newGraph.removeVertex();
         newGraph.printGraph();
-        /*We run Dijkstra in each vertex and put discover value in matrix using changeWeight function*/
+        /*We run Dijkstra in each vertex and put discover value in matrix using setValue function*/
         for(int i = 0; i < gVertex; i++) {
             allDvalues.push_back(algorithmDijkstra(newGraph, i));
             for(int j = 0; j < gVertex; j++) {
-                setValue(allDvalues[i][j], dvalues[j], dvalues[i]);
+                if(allDvalues[i][j] != INFINIT) {
+                    allDvalues[i][j] = setValue(allDvalues[i][j], dvalues[j], dvalues[i]);
+                }
             }
         }
         printJohnson(allDvalues, gVertex);

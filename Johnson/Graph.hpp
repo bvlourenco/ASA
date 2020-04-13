@@ -6,11 +6,13 @@
 #include <iostream>
 #include <utility>
 
+#define AdjLst vector<list<pair<int, int>>>
+
 using namespace std;
 
 class Graph {
     int V;
-    vector<list<pair<int, int>>> adjLst;
+    AdjLst adjLst;
 public:
     Graph(int V);
     Graph(const Graph &g);
@@ -19,8 +21,8 @@ public:
     void addEdge(int v1, int v2, int w);
     void printGraph();
     int getNumVertex() const;
-    vector<list<pair<int, int>>> getadjLst() const;
-    vector<list<pair<int, int>>>& getModifiableAdjLst();
+    AdjLst getadjLst() const;
+    AdjLst& getModifiableAdjLst();
     ~Graph();
 };
 

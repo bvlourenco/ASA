@@ -6,13 +6,13 @@ void InitializeSingleSource(vector<int> &dvalues, vector<int> &pivalues, int ind
     dvalues[indexVertex] = 0;
 }
 
-void initPriorityQueue(const vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> &Q, int numVertex) {
+void initPriorityQueue(const vector<int> &dvalues, priority_queue <pair<int, int>, vector<pair<int, int>>, GREATER> &Q, int numVertex) {
     for(int i = 0; i < numVertex; i++) {
         Q.push(make_pair(dvalues[i], i));
     }
 }
 
-void Relax(vector<int> &dvalues, priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> &Q, vector<int> &pivalues, pair<int,int> u, pair<int,int> v, int vdvalue, int *i) {
+void Relax(vector<int> &dvalues, priority_queue <pair<int, int>, vector<pair<int, int>>, GREATER> &Q, vector<int> &pivalues, pair<int,int> u, pair<int,int> v, int vdvalue, int *i) {
     if(vdvalue > u.first + v.second) {
         dvalues[v.first] = u.first + v.second;
         pivalues[v.first] = u.second;
@@ -37,11 +37,11 @@ void printValues(const vector<int> &dvalues, const vector<int> &pivalues, int nu
 void algorithmDijkstra(const Graph &g, int indexVertex) {
     int numVertex = g.getNumVertex();
     int i = numVertex - 1;
-    vector<list<pair<int, int>>> adjLst = g.getadjLst();
-    vector<int> dvalues(numVertex), pivalues(numVertex);
+    AdjLst adjLst = g.getadjLst();
+    vector<int> dvalues(numVertex), pivalues(numVertex), isVisited(numVertex, NO);
     InitializeSingleSource(dvalues, pivalues, indexVertex);
     /*To make a min priority queue, we can use regular priority queue with greater comparator (default comparator makes a max heap)*/
-    priority_queue <int, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+    priority_queue <pair<int, int>, vector<pair<int, int>>, GREATER> Q;
     initPriorityQueue(dvalues, Q, numVertex);
     /*Since we have old elements on std::priority queue, we have to have a counter i that counts the first k number
      *of elements in priority queue (the remaining ones are old elements)
@@ -49,13 +49,18 @@ void algorithmDijkstra(const Graph &g, int indexVertex) {
     while(i > 0) {
         pair<int,int> u = Q.top();
         Q.pop();
-        i--;
         /*If minimum discovery time of the vertex in priority queue is infinite, we can stop the algorithm
-         *(we don't delete values from priority queue --(hence)--> this is a measure to otimize the algorithm)
+         *(this is a measure to otimize the algorithm)
          */
         if(u.first == INFINIT) {
             break;
         }
+        /*If a vertex was already visited, we dont need to relax edges so we skip to next iteration*/
+        if(isVisited[u.second]) {
+            continue;
+        }
+        isVisited[u.second] = YES;
+        i--;
         for(auto iterator = adjLst[u.second].begin(); iterator != adjLst[u.second].end(); iterator++) {
             Relax(dvalues, Q, pivalues, u, *iterator, dvalues[iterator->first], &i);
         }
