@@ -1,0 +1,39 @@
+g++ -o output --std=c++11 -g -Wall -Wextra -Werror -pedantic ficheiro.cpp
+
+Grafo sem ciclos negativos (Dijkstra e Bellman-Ford -- exemplo da aula 7):
+5 9
+0 1 4
+0 2 2
+1 2 3
+1 3 2
+1 4 3
+2 1 1
+2 3 4
+2 4 5
+4 3 1
+
+Grafo com ciclo negativo (exemplo da pratica 4 com ciclo negativo):
+5 10
+0 1 6
+0 2 7
+1 3 5
+1 2 8
+1 4 -4
+2 3 -3
+2 4 9
+3 2 -2
+4 3 7
+4 0 2
+
+Grafo (para o algoritmo de Johnson):
+6 10
+0 4 -1
+4 1 7
+1 0 1
+1 3 2
+2 1 2
+2 5 -8
+3 0 -4
+3 4 3
+5 1 5
+5 2 10
