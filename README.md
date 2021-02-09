@@ -1,2 +1,2 @@
-# ASA
-Repository with some ASA algorithms implemented in C++
+# Algorithms
+Repository with some Algorithms algorithms implemented in C++
