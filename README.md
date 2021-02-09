@@ -1,2 +1,2 @@
 # Algorithms
-Repository with some Algorithms algorithms implemented in C++
+Repository with some algorithms implemented in C++
